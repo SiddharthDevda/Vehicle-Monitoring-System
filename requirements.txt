@@ -1,0 +1,10 @@
+streamlit
+opencv-python-headless
+numpy
+ultralytics
+paddleocr
+paddlepaddle
+pillow
+pandas
+streamlit-webrtc
+av
