@@ -15,7 +15,7 @@ st.set_page_config(
     page_title="VMS · Vehicle Monitoring System",
     page_icon="🛡️",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 st.markdown("""
@@ -454,60 +454,46 @@ section[data-testid="stSidebar"] {
 /* ═══════════════════════════════════════════
    MOBILE — ≤ 768px
 ═══════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════
+   MOBILE SIDEBAR — overlay, not full cover
+═══════════════════════════════════════════ */
 @media (max-width: 768px) {
-
-    .main-content { padding: 1rem 0.9rem !important; }
-
-    /* Page header stacks */
-    .page-top { flex-direction: column; align-items: flex-start; margin-bottom: 1.2rem; padding-bottom: 1rem; }
-    .page-title { font-size: 1.6rem !important; }
-    .page-sub   { font-size: 0.8rem !important; }
-    .page-badge { font-size: 0.68rem !important; padding: 0.4rem 0.9rem !important; }
-
-    /* Stats: 2 columns */
-    .stats-row { grid-template-columns: repeat(2, 1fr) !important; gap: 0.6rem !important; }
-    .stat-num  { font-size: 1.7rem !important; }
-    .stat-lbl  { font-size: 0.65rem !important; }
-    .stat-card { padding: 0.85rem 0.9rem !important; }
-
-    /* Feature grid: 1 column */
-    .feat-grid { grid-template-columns: 1fr !important; }
-
-    /* Help cards: 1 column */
-    .help-3col { grid-template-columns: 1fr !important; }
-
-    /* Result cards: full width */
-    .results-wrap { grid-template-columns: 1fr !important; }
-
-    /* About hero */
-    .about-hero { padding: 1.4rem 1.2rem !important; }
-    .about-hero::before { display: none; }
-    .about-title { font-size: 1.15rem !important; }
-    .about-desc  { font-size: 0.8rem !important; }
-
-    /* Remove hardcoded side padding from image column wrappers */
-    .img-col-left  { padding: 0 !important; }
-    .img-col-right { padding: 0 !important; }
-
-    /* Upload zone shorter */
-    [data-testid="stFileUploader"] label { min-height: 110px !important; }
-
-    /* Plate font */
-    .r-plate { font-size: 1.1rem !important; }
-
-    /* Section label */
-    .s-label { font-size: 0.6rem !important; }
-
-    /* Tech tags */
-    .tech-bar { padding: 0.8rem !important; gap: 0.35rem !important; }
-    .tech-tag { font-size: 0.65rem !important; padding: 0.2rem 0.55rem !important; }
-
-    /* Bigger touch targets */
-    [data-testid="stButton"] > button,
-    [data-testid="stDownloadButton"] > button { min-height: 48px !important; font-size: 0.9rem !important; }
-
-    /* Data table scrollable */
-    [data-testid="stDataFrame"] { overflow-x: auto !important; }
+    /* Sidebar slides over content, doesn't push it */
+    [data-testid="stSidebar"] {
+        position: fixed !important;
+        top: 0 !important; left: 0 !important;
+        height: 100vh !important;
+        z-index: 1000 !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
+        transform: translateX(-100%) !important;
+        transition: transform 0.25s ease !important;
+        box-shadow: 4px 0 30px rgba(0,0,0,0.8) !important;
+    }
+    /* When Streamlit marks sidebar as expanded */
+    [data-testid="stSidebar"][aria-expanded="true"] {
+        transform: translateX(0) !important;
+    }
+    /* Main content always full width on mobile */
+    [data-testid="stAppViewContainer"] > section.main {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+    }
+    /* Collapse button: always visible, top-left */
+    [data-testid="stSidebarCollapseButton"] {
+        position: fixed !important;
+        top: 12px !important; left: 12px !important;
+        z-index: 1100 !important;
+        width: 38px !important; height: 38px !important;
+        background: rgba(37,99,235,0.95) !important;
+        border-radius: 8px !important;
+        border: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 }
 
 /* ═══════════════════════════════════════════
@@ -532,23 +518,12 @@ section[data-testid="stSidebar"] {
 if "page" not in st.session_state:
     st.session_state.page = "🖼️ Image Detection"
 
-# ── Force sidebar open on every load ─────────────────────────────────────────
+
+# ── Auto-collapse sidebar on mobile, keep open on desktop ────────────────────
 st.markdown("""
-<script>
-(function() {
-    function openSidebar() {
-        var sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
-        if (sidebar && sidebar.getAttribute('aria-expanded') === 'false') {
-            var btn = window.parent.document.querySelector('[data-testid="stSidebarCollapseButton"]');
-            if (btn) btn.click();
-        }
-    }
-    openSidebar();
-    setTimeout(openSidebar, 100);
-    setTimeout(openSidebar, 400);
-})();
-</script>
+
 """, unsafe_allow_html=True)
+
 
 # ── NAV ITEMS ─────────────────────────────────────────────────────────────────
 NAV = [
