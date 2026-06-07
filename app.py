@@ -62,7 +62,7 @@ html, body, [data-testid="stAppViewContainer"] {
 [data-testid="stDecoration"] { display: none !important; }
 
 /* ═══════════════════════════════════════════
-   SIDEBAR — Redesigned
+   SIDEBAR
 ═══════════════════════════════════════════ */
 [data-testid="stSidebar"] {
     background: #0a0e1a !important;
@@ -74,7 +74,6 @@ html, body, [data-testid="stAppViewContainer"] {
 [data-testid="stSidebarContent"],
 [data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
 
-/* ── Toggle button ── */
 [data-testid="stSidebarCollapseButton"] {
     background: rgba(37,99,235,0.9) !important;
     border-radius: 8px !important;
@@ -99,7 +98,6 @@ section[data-testid="stSidebar"] {
     transform: none !important; visibility: visible !important; opacity: 1 !important;
 }
 
-/* ── Nav pill buttons ── */
 [data-testid="stSidebar"] [data-testid="stButton"] > button {
     background: transparent !important;
     color: #64748b !important;
@@ -116,6 +114,7 @@ section[data-testid="stSidebar"] {
     width: calc(100% - 1.8rem) !important;
     letter-spacing: -0.01em !important;
     transition: all 0.15s ease !important;
+    min-height: 44px !important;
 }
 [data-testid="stSidebar"] [data-testid="stButton"] > button:hover {
     background: rgba(255,255,255,0.06) !important;
@@ -129,10 +128,8 @@ section[data-testid="stSidebar"] {
 .main-content { padding: 1.8rem 2.2rem; }
 
 /* ═══════════════════════════════════════════
-   SIDEBAR COMPONENTS — Redesigned
+   SIDEBAR COMPONENTS
 ═══════════════════════════════════════════ */
-
-/* ── Brand area ── */
 .sb-brand {
     padding: 1.4rem 1.2rem 1.2rem;
     border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -175,7 +172,6 @@ section[data-testid="stSidebar"] {
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
 
-/* Nav section */
 .sb-section {
     padding: 1.1rem 1.2rem 0.35rem;
     font-size: 0.58rem; font-weight: 700;
@@ -191,11 +187,7 @@ section[data-testid="stSidebar"] {
     font-size: 0.88rem; font-weight: 700;
     color: #93c5fd; cursor: default;
 }
-
-/* Divider */
 .sb-divider { height: 1px; background: rgba(255,255,255,0.05); margin: 0.5rem 1.2rem; }
-
-/* System info */
 .sb-sysinfo { padding: 0.7rem 1.2rem; }
 .sb-sysinfo-title {
     font-size: 0.55rem; font-weight: 700;
@@ -208,8 +200,6 @@ section[data-testid="stSidebar"] {
 }
 .sb-sysinfo-key { font-size: 0.73rem; color: #475569; }
 .sb-sysinfo-val { font-size: 0.7rem; color: #10b981; font-weight: 600; }
-
-/* Footer */
 .sb-footer {
     padding: 0.8rem 1.2rem;
     border-top: 1px solid rgba(255,255,255,0.05);
@@ -230,8 +220,9 @@ section[data-testid="stSidebar"] {
     margin-bottom: 2rem;
     padding-bottom: 1.4rem;
     border-bottom: 1px solid var(--bdr);
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
-.page-title-wrap {}
 .page-title {
     font-size: 2.2rem; font-weight: 800;
     color: var(--text); letter-spacing: -0.035em; line-height: 1;
@@ -268,10 +259,11 @@ section[data-testid="stSidebar"] {
 }
 
 /* ═══════════════════════════════════════════
-   STAT CARDS
+   STAT CARDS — 4-col desktop, 2-col mobile
 ═══════════════════════════════════════════ */
 .stats-row {
-    display: grid; grid-template-columns: repeat(4,1fr);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 0.85rem; margin-bottom: 1.8rem;
 }
 .stat-card {
@@ -284,8 +276,7 @@ section[data-testid="stSidebar"] {
 }
 .stat-card:hover { border-color: var(--bdr2); transform: translateY(-2px); }
 .stat-card::after {
-    content: ''; position: absolute;
-    inset: 0; pointer-events: none;
+    content: ''; position: absolute; inset: 0; pointer-events: none;
     background: radial-gradient(circle at top left, rgba(37,99,235,0.05), transparent 65%);
 }
 .stat-card-b { border-top: 2px solid var(--blue2); }
@@ -294,39 +285,31 @@ section[data-testid="stSidebar"] {
 .stat-card-c { border-top: 2px solid var(--cyan); }
 .stat-num {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 2.2rem; font-weight: 700;
-    line-height: 1;
+    font-size: 2.2rem; font-weight: 700; line-height: 1;
 }
 .stat-num-b { color: var(--blue3); }
 .stat-num-g { color: var(--green); }
 .stat-num-r { color: var(--red); }
 .stat-num-c { color: var(--cyan); }
 .stat-lbl { font-size: 0.7rem; color: var(--text2); margin-top: 0.4rem; font-weight: 500; }
-.stat-ico {
-    position: absolute; top: 1rem; right: 1rem;
-    font-size: 1.3rem; opacity: 0.15;
-}
+.stat-ico { position: absolute; top: 1rem; right: 1rem; font-size: 1.3rem; opacity: 0.15; }
 
 /* ═══════════════════════════════════════════
    IMAGE PANELS
 ═══════════════════════════════════════════ */
 .img-panel {
     background: var(--bg2); border: 1px solid var(--bdr);
-    border-radius: 12px; overflow: hidden;
-    transition: border-color 0.2s;
+    border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
 }
 .img-panel:hover { border-color: var(--bdr2); }
 .img-hdr {
     padding: 0.65rem 1rem;
     font-size: 0.68rem; font-weight: 700;
     color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em;
-    background: var(--bg3);
-    border-bottom: 1px solid var(--bdr);
+    background: var(--bg3); border-bottom: 1px solid var(--bdr);
     display: flex; align-items: center; gap: 0.4rem;
 }
-.img-hdr-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-}
+.img-hdr-dot { width: 7px; height: 7px; border-radius: 50%; }
 
 /* ═══════════════════════════════════════════
    RESULT CARDS
@@ -348,57 +331,38 @@ section[data-testid="stSidebar"] {
     top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, var(--blue), var(--cyan));
 }
-.r-vidx {
-    font-size: 0.6rem; font-weight: 700; color: var(--text3);
-    text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.6rem;
-}
+.r-vidx { font-size: 0.6rem; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.6rem; }
 .r-type-badge {
     display: inline-flex; align-items: center; gap: 0.3rem;
     background: var(--blue-dim); border: 1px solid var(--blue-bdr);
     border-radius: 5px; padding: 0.18rem 0.6rem;
-    font-size: 0.65rem; font-weight: 700;
-    color: var(--blue3); text-transform: uppercase;
-    letter-spacing: 0.07em; margin-bottom: 0.75rem;
+    font-size: 0.65rem; font-weight: 700; color: var(--blue3);
+    text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.75rem;
 }
 .r-plate {
     font-family: 'JetBrains Mono', monospace;
     font-size: 1.4rem; font-weight: 700; color: var(--text);
     letter-spacing: 0.08em; margin-bottom: 0.7rem;
     padding: 0.4rem 0.7rem;
-    background: var(--bg3); border-radius: 6px;
-    border: 1px solid var(--bdr2);
+    background: var(--bg3); border-radius: 6px; border: 1px solid var(--bdr2);
 }
-.r-plate-miss {
-    font-size: 0.82rem; color: var(--text3);
-    font-family: 'Inter', sans-serif; font-weight: 400;
-    margin-bottom: 0.7rem; font-style: italic;
-}
-.r-belt {
-    display: inline-flex; align-items: center; gap: 0.35rem;
-    padding: 0.28rem 0.75rem; border-radius: 6px;
-    font-size: 0.72rem; font-weight: 700;
-}
+.r-plate-miss { font-size: 0.82rem; color: var(--text3); font-family: 'Inter', sans-serif; font-weight: 400; margin-bottom: 0.7rem; font-style: italic; }
+.r-belt { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.28rem 0.75rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; }
 .r-belt-on  { background: var(--green-dim); border: 1px solid var(--green-bdr); color: var(--green); }
 .r-belt-off { background: var(--red-dim);   border: 1px solid var(--red-bdr);   color: var(--red); }
 
 /* ═══════════════════════════════════════════
    UPLOAD ZONE
 ═══════════════════════════════════════════ */
-[data-testid="stFileUploader"] > div {
-    background: transparent !important; border: none !important; padding: 0 !important;
-}
+[data-testid="stFileUploader"] > div { background: transparent !important; border: none !important; padding: 0 !important; }
 [data-testid="stFileUploader"] label {
     min-height: 170px !important;
     border: 2px dashed rgba(37,99,235,0.3) !important;
     border-radius: 12px !important;
     background: rgba(37,99,235,0.04) !important;
-    transition: all 0.2s !important;
-    cursor: pointer !important;
+    transition: all 0.2s !important; cursor: pointer !important;
 }
-[data-testid="stFileUploader"] label:hover {
-    border-color: var(--blue2) !important;
-    background: var(--blue-dim) !important;
-}
+[data-testid="stFileUploader"] label:hover { border-color: var(--blue2) !important; background: var(--blue-dim) !important; }
 
 /* ═══════════════════════════════════════════
    BUTTONS
@@ -410,16 +374,16 @@ section[data-testid="stSidebar"] {
     font-family: 'Inter', sans-serif !important;
     box-shadow: 0 4px 12px rgba(37,99,235,0.3) !important;
     transition: all 0.2s !important;
+    min-height: 44px !important;
 }
 [data-testid="stButton"] > button:hover {
     box-shadow: 0 6px 20px rgba(37,99,235,0.5) !important;
     transform: translateY(-1px) !important;
 }
-
 [data-testid="stDownloadButton"] > button {
     background: var(--bg3) !important; color: var(--text2) !important;
-    border: 1px solid var(--bdr2) !important;
-    box-shadow: none !important;
+    border: 1px solid var(--bdr2) !important; box-shadow: none !important;
+    min-height: 44px !important;
 }
 [data-testid="stDownloadButton"] > button:hover {
     border-color: var(--blue2) !important; color: var(--blue3) !important;
@@ -431,19 +395,10 @@ section[data-testid="stSidebar"] {
 ═══════════════════════════════════════════ */
 .empty-box {
     text-align: center; padding: 3.5rem 2rem;
-    background: var(--bg2);
-    border: 1px dashed rgba(255,255,255,0.08);
+    background: var(--bg2); border: 1px dashed rgba(255,255,255,0.08);
     border-radius: 12px; color: var(--text3); font-size: 0.875rem;
 }
 .empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.35; display: block; }
-
-/* ═══════════════════════════════════════════
-   VIDEO & CAMERA CONTAINERS
-═══════════════════════════════════════════ */
-.vid-box {
-    background: var(--bg2); border: 1px solid var(--bdr);
-    border-radius: 12px; padding: 1.5rem;
-}
 
 /* ═══════════════════════════════════════════
    ABOUT PAGE
@@ -465,83 +420,110 @@ section[data-testid="stSidebar"] {
     background: radial-gradient(circle, rgba(37,99,235,0.2), transparent 70%);
     pointer-events: none;
 }
-.about-title {
-    font-size: 1.4rem; font-weight: 800; color: var(--text);
-    letter-spacing: -0.02em; margin-bottom: 0.5rem;
-}
+.about-title { font-size: 1.4rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
 .about-desc { font-size: 0.875rem; color: var(--text2); line-height: 1.75; max-width: 560px; }
 
-.feat-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 0.85rem;
-}
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.85rem; }
 .feat-card {
     background: var(--bg2); border: 1px solid var(--bdr);
     border-radius: 12px; padding: 1.2rem;
-    transition: border-color 0.2s, transform 0.2s;
-    position: relative; overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s; position: relative; overflow: hidden;
 }
 .feat-card:hover { border-color: rgba(37,99,235,0.3); transform: translateY(-2px); }
-.feat-card::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(37,99,235,0.4), transparent);
-}
+.feat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(37,99,235,0.4), transparent); }
 .feat-icon { font-size: 1.6rem; margin-bottom: 0.7rem; }
 .feat-title { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem; }
 .feat-desc  { font-size: 0.76rem; color: var(--text2); line-height: 1.65; }
 
-.help-3col { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.85rem; }
-.help-card {
-    background: var(--bg2); border: 1px solid var(--bdr);
-    border-radius: 12px; padding: 1.2rem;
-}
-.help-card-title {
-    font-size: 0.82rem; font-weight: 700; color: var(--blue3);
-    margin-bottom: 0.9rem; padding-bottom: 0.7rem;
-    border-bottom: 1px solid var(--bdr);
-    display: flex; align-items: center; gap: 0.4rem;
-}
+.help-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; }
+.help-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: 12px; padding: 1.2rem; }
+.help-card-title { font-size: 0.82rem; font-weight: 700; color: var(--blue3); margin-bottom: 0.9rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--bdr); display: flex; align-items: center; gap: 0.4rem; }
 .help-step { display: flex; gap: 0.7rem; margin-bottom: 0.65rem; align-items: flex-start; }
-.help-n {
-    width: 20px; height: 20px; border-radius: 5px;
-    background: var(--blue-dim); border: 1px solid var(--blue-bdr);
-    color: var(--blue3); font-size: 0.6rem; font-weight: 800;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 1px;
-    font-family: 'JetBrains Mono', monospace;
-}
+.help-n { width: 20px; height: 20px; border-radius: 5px; background: var(--blue-dim); border: 1px solid var(--blue-bdr); color: var(--blue3); font-size: 0.6rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; font-family: 'JetBrains Mono', monospace; }
 .help-t { font-size: 0.79rem; color: var(--text2); line-height: 1.6; }
 
-.tech-bar {
-    background: var(--bg2); border: 1px solid var(--bdr);
-    border-radius: 12px; padding: 1.1rem 1.3rem;
-    display: flex; flex-wrap: wrap; gap: 0.45rem;
-}
-.tech-tag {
-    display: inline-flex; align-items: center; gap: 0.3rem;
-    padding: 0.22rem 0.7rem;
-    background: var(--bg3); border: 1px solid var(--bdr2);
-    border-radius: 5px; font-size: 0.7rem; font-weight: 500; color: var(--text2);
+.tech-bar { background: var(--bg2); border: 1px solid var(--bdr); border-radius: 12px; padding: 1.1rem 1.3rem; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.tech-tag { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.22rem 0.7rem; background: var(--bg3); border: 1px solid var(--bdr2); border-radius: 5px; font-size: 0.7rem; font-weight: 500; color: var(--text2); }
+
+/* ═══════════════════════════════════════════
+   DATA EDITOR / ALERT
+═══════════════════════════════════════════ */
+[data-testid="stDataFrame"] { background: var(--bg2) !important; border-radius: 12px !important; border: 1px solid var(--bdr) !important; }
+[data-testid="stAlert"] { background: var(--blue-dim) !important; border: 1px solid var(--blue-bdr) !important; border-radius: 10px !important; color: var(--blue3) !important; }
+
+/* ═══════════════════════════════════════════
+   MOBILE — ≤ 768px
+═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+    .main-content { padding: 1rem 0.9rem !important; }
+
+    /* Page header stacks */
+    .page-top { flex-direction: column; align-items: flex-start; margin-bottom: 1.2rem; padding-bottom: 1rem; }
+    .page-title { font-size: 1.6rem !important; }
+    .page-sub   { font-size: 0.8rem !important; }
+    .page-badge { font-size: 0.68rem !important; padding: 0.4rem 0.9rem !important; }
+
+    /* Stats: 2 columns */
+    .stats-row { grid-template-columns: repeat(2, 1fr) !important; gap: 0.6rem !important; }
+    .stat-num  { font-size: 1.7rem !important; }
+    .stat-lbl  { font-size: 0.65rem !important; }
+    .stat-card { padding: 0.85rem 0.9rem !important; }
+
+    /* Feature grid: 1 column */
+    .feat-grid { grid-template-columns: 1fr !important; }
+
+    /* Help cards: 1 column */
+    .help-3col { grid-template-columns: 1fr !important; }
+
+    /* Result cards: full width */
+    .results-wrap { grid-template-columns: 1fr !important; }
+
+    /* About hero */
+    .about-hero { padding: 1.4rem 1.2rem !important; }
+    .about-hero::before { display: none; }
+    .about-title { font-size: 1.15rem !important; }
+    .about-desc  { font-size: 0.8rem !important; }
+
+    /* Remove hardcoded side padding from image column wrappers */
+    .img-col-left  { padding: 0 !important; }
+    .img-col-right { padding: 0 !important; }
+
+    /* Upload zone shorter */
+    [data-testid="stFileUploader"] label { min-height: 110px !important; }
+
+    /* Plate font */
+    .r-plate { font-size: 1.1rem !important; }
+
+    /* Section label */
+    .s-label { font-size: 0.6rem !important; }
+
+    /* Tech tags */
+    .tech-bar { padding: 0.8rem !important; gap: 0.35rem !important; }
+    .tech-tag { font-size: 0.65rem !important; padding: 0.2rem 0.55rem !important; }
+
+    /* Bigger touch targets */
+    [data-testid="stButton"] > button,
+    [data-testid="stDownloadButton"] > button { min-height: 48px !important; font-size: 0.9rem !important; }
+
+    /* Data table scrollable */
+    [data-testid="stDataFrame"] { overflow-x: auto !important; }
 }
 
 /* ═══════════════════════════════════════════
-   DATA EDITOR
+   SMALL PHONES — ≤ 480px
 ═══════════════════════════════════════════ */
-[data-testid="stDataFrame"] {
-    background: var(--bg2) !important;
-    border-radius: 12px !important;
-    border: 1px solid var(--bdr) !important;
-}
-
-/* ═══════════════════════════════════════════
-   ALERT / INFO
-═══════════════════════════════════════════ */
-[data-testid="stAlert"] {
-    background: var(--blue-dim) !important;
-    border: 1px solid var(--blue-bdr) !important;
-    border-radius: 10px !important;
-    color: var(--blue3) !important;
+@media (max-width: 480px) {
+    .main-content { padding: 0.75rem 0.65rem !important; }
+    .page-title   { font-size: 1.35rem !important; }
+    .stat-num     { font-size: 1.45rem !important; }
+    .stats-row    { gap: 0.45rem !important; }
+    .stat-card    { padding: 0.7rem 0.75rem !important; }
+    .stat-ico     { display: none; }
+    .r-plate      { font-size: 1rem !important; letter-spacing: 0.04em !important; }
+    .feat-icon    { font-size: 1.3rem !important; margin-bottom: 0.5rem !important; }
+    .feat-title   { font-size: 0.82rem !important; }
+    .feat-desc    { font-size: 0.72rem !important; }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -561,7 +543,6 @@ st.markdown("""
             if (btn) btn.click();
         }
     }
-    // Try immediately and after short delays to handle rerun timing
     openSidebar();
     setTimeout(openSidebar, 100);
     setTimeout(openSidebar, 400);
@@ -755,7 +736,7 @@ if page == "🎥 Video Detection":
     """, unsafe_allow_html=True)
 
     with st.container():
-        st.markdown('<div style="padding:0 2.2rem;">', unsafe_allow_html=True)
+        st.markdown('<div style="padding:0 0.9rem;">', unsafe_allow_html=True)
         uploaded_video = st.file_uploader("MP4 · AVI · MOV", type=["mp4","avi","mov"], label_visibility="collapsed")
         col_btn, _ = st.columns([1, 6])
         with col_btn:
@@ -802,7 +783,7 @@ elif page == "📷 Live Camera":
     """, unsafe_allow_html=True)
 
     with st.container():
-        st.markdown('<div style="padding:0 2.2rem;">', unsafe_allow_html=True)
+        st.markdown('<div style="padding:0 0.9rem;">', unsafe_allow_html=True)
         st.info("🔒 Camera access required — allow permission when prompted, then click **Start**.")
 
         class VideoProcessor(VideoProcessorBase):
@@ -837,7 +818,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 with st.container():
-    st.markdown('<div style="padding:0 2.2rem;">', unsafe_allow_html=True)
+    st.markdown('<div style="padding:0 0.9rem;">', unsafe_allow_html=True)
     uploaded_file = st.file_uploader(
         "Drag & drop or click — JPG · JPEG · PNG",
         type=["jpg","jpeg","png"],
@@ -889,20 +870,12 @@ if uploaded_file:
 
     col1, col2 = st.columns(2, gap="medium")
     with col1:
-        st.markdown("""
-        <div style="padding:0 0 0 2.2rem;">
-        <div class="img-panel">
-            <div class="img-hdr"><div class="img-hdr-dot" style="background:#475569;"></div>Original Image</div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="img-col-left"><div class="img-panel"><div class="img-hdr"><div class="img-hdr-dot" style="background:#475569;"></div>Original Image</div>', unsafe_allow_html=True)
         st.image(image, channels="BGR", use_container_width=True)
         st.markdown('</div></div>', unsafe_allow_html=True)
 
     with col2:
-        st.markdown("""
-        <div style="padding:0 2.2rem 0 0;">
-        <div class="img-panel">
-            <div class="img-hdr"><div class="img-hdr-dot" style="background:#3b82f6;"></div>AI Detection Output</div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="img-col-right"><div class="img-panel"><div class="img-hdr"><div class="img-hdr-dot" style="background:#3b82f6;"></div>AI Detection Output</div>', unsafe_allow_html=True)
         st.image(result["image"], channels="BGR", use_container_width=True)
         st.markdown('</div></div>', unsafe_allow_html=True)
 
@@ -946,7 +919,7 @@ if uploaded_file:
 
 else:
     st.markdown("""
-    <div style="padding: 0 2.2rem 2rem;">
+    <div style="padding: 0 0.9rem 2rem;">
     <div class="empty-box">
         <span class="empty-icon">🛡️</span>
         Upload an image above to begin AI vehicle analysis.
