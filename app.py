@@ -646,18 +646,50 @@ if page == "video":
         cap = cv2.VideoCapture(tmp.name)
         placeholder = st.empty()
         n = 0
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = cap.get(cv2.CAP_PROP_FPS)
+
+        if fps <= 0:
+            fps = 25
+
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+        out = cv2.VideoWriter(
+            "processed_video.mp4",
+            fourcc,
+            fps,
+            (640, 480)
+        )
         with st.spinner("Processing video stream..."):
             while cap.isOpened():
                 if stop_video: break
                 ret, frame = cap.read()
                 if not ret: break
                 n += 1
-                if n % 30 != 0: continue
+                if n % 5 != 0: continue
                 frame = cv2.resize(frame, (640, 480))
                 r = process_image(frame, video_mode=True)
-                placeholder.image(r["image"], channels="BGR", use_container_width=True)
+
+                out.write(r["image"])
+
+                placeholder.image(
+                    r["image"],
+                    channels="BGR",
+                    use_container_width=True
+                )
         cap.release()
+        out.release()
+
         st.success("✅ Video processing complete")
+        st.video("processed_video.mp4")
+        
+        with open("processed_video.mp4", "rb") as f:
+            st.download_button(
+                label="📥 Download Processed Video",
+                data=f,
+                file_name="processed_video.mp4",
+                mime="video/mp4"
+            )
     st.stop()
 
 

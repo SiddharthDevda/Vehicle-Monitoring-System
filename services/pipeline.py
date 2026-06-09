@@ -254,11 +254,16 @@ def process_image(image, video_mode=False):
         # ── Plate reading ──
 
         if video_mode:
-            plate_crop = detect_plate_crop(vehicle_crop, vehicle_name)
-            if plate_crop is not None:
-                plate_text = read_plate_with_fallback(plate_crop, vehicle_name)
-            else:
-                plate_text = "Not Found"
+            plate_text = "Skipped"
+
+            if vehicle_name in ["car", "truck", "bus"]:
+                plate_crop = detect_plate_crop(vehicle_crop, vehicle_name)
+
+                if plate_crop is not None:
+                    plate_text = read_plate_with_fallback(
+                        plate_crop,
+                        vehicle_name
+                    )
 
         elif vehicle_name == "truck":
             plate_text = ocr_truck(vehicle_crop)
