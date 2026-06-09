@@ -820,6 +820,7 @@ if page == "live":
     class VideoProcessor(VideoProcessorBase):
         def recv(self, frame):
             img = frame.to_ndarray(format="bgr24")
+            img = cv2.resize(img, (640, 480))
             r = process_image(img, video_mode=True)
             return av.VideoFrame.from_ndarray(r["image"], format="bgr24")
 
