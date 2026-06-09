@@ -813,8 +813,8 @@ if page == "live":
     # Use "exact" so browser MUST switch — "ideal" lets it stay on the old camera
     video_constraints = {
         "facingMode":  facing,
-        "width":      {"ideal": 1280},
-        "height":     {"ideal": 720},
+        "width":      {"ideal": 640},
+        "height":     {"ideal": 480},
     }
 
     class VideoProcessor(VideoProcessorBase):
