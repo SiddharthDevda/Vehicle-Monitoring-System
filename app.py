@@ -812,7 +812,7 @@ if page == "live":
 
     # Use "exact" so browser MUST switch — "ideal" lets it stay on the old camera
     video_constraints = {
-        "facingMode": {"exact": facing},
+        "facingMode":  facing,
         "width":      {"ideal": 1280},
         "height":     {"ideal": 720},
     }
