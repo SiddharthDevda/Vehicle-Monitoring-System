@@ -680,99 +680,109 @@ if page == "live":
     </div>
     """, unsafe_allow_html=True)
 
-    # Camera selector — persisted in session state so switching reruns cleanly
-    if "cam_facing" not in st.session_state:
-        st.session_state.cam_facing = "environment"   # default = back camera
+    # ── Session state init ────────────────────────────────────────────────────
+    if "cam_facing"  not in st.session_state:
+        st.session_state.cam_facing  = "environment"  # back camera by default
+    if "cam_gen"     not in st.session_state:
+        st.session_state.cam_gen     = 0              # increments on every switch
 
     st.markdown("""
     <style>
-    .cam-toggle-row {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 1.2rem;
-        flex-wrap: wrap;
-    }
     .cam-toggle-label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--text2);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        flex-shrink: 0;
+        font-size: 0.72rem; font-weight: 700; color: var(--text2);
+        text-transform: uppercase; letter-spacing: 0.12em;
+        margin-bottom: 0.6rem;
     }
-    .cam-opt {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        padding: 0.45rem 1.1rem;
-        border-radius: 8px;
-        font-size: 0.82rem;
-        font-weight: 500;
-        border: 1px solid rgba(255,255,255,0.1);
-        color: #64748b;
-        cursor: pointer;
-        transition: all 0.15s;
-        background: var(--bg2);
+    /* Make the two camera buttons look like a segmented control */
+    .cam-seg-wrap {
+        display: flex; gap: 0; margin-bottom: 1.2rem;
+        border: 1px solid rgba(255,255,255,0.1); border-radius: 9px;
+        overflow: hidden; width: fit-content;
     }
-    .cam-opt:hover  { border-color: var(--blue-bdr); color: var(--blue3); }
-    .cam-opt.active {
-        background: rgba(37,99,235,0.15);
-        border-color: rgba(37,99,235,0.35);
-        color: #93c5fd;
-        font-weight: 700;
-    }
-    /* Override Streamlit button inside the toggle row */
-    div[data-testid="stHorizontalBlock"].cam-row > div[data-testid="stColumn"] {
-        padding: 0 4px !important; flex: 0 0 auto !important;
-    }
-    .cam-row [data-testid="stButton"] > button {
-        min-height: 38px !important;
-        padding: 0.35rem 1rem !important;
+    /* Active button — blue fill */
+    .cam-active [data-testid="stButton"] > button {
+        background: rgba(37,99,235,0.85) !important;
+        color: #fff !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        min-height: 40px !important;
         font-size: 0.82rem !important;
-        border-radius: 8px !important;
+        font-weight: 700 !important;
+        padding: 0 1.2rem !important;
     }
-    /* Inactive camera button style */
-    .cam-row .inactive-btn [data-testid="stButton"] > button {
+    /* Inactive button — dark flat */
+    .cam-inactive [data-testid="stButton"] > button {
         background: var(--bg2) !important;
         color: #64748b !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
+        border: none !important;
+        border-radius: 0 !important;
         box-shadow: none !important;
+        min-height: 40px !important;
+        font-size: 0.82rem !important;
+        font-weight: 500 !important;
+        padding: 0 1.2rem !important;
+        transform: none !important;
     }
-    .cam-row .inactive-btn [data-testid="stButton"] > button:hover {
-        border-color: var(--blue-bdr) !important;
-        color: var(--blue3) !important;
+    .cam-inactive [data-testid="stButton"] > button:hover {
+        background: rgba(255,255,255,0.06) !important;
+        color: #cbd5e1 !important;
         transform: none !important;
         box-shadow: none !important;
+    }
+    /* Divider between the two buttons */
+    .cam-divider {
+        width: 1px; background: rgba(255,255,255,0.1); flex-shrink: 0;
+        align-self: stretch;
     }
     </style>
     """, unsafe_allow_html=True)
 
     facing = st.session_state.cam_facing
+    gen    = st.session_state.cam_gen
+
     st.markdown('<div class="cam-toggle-label">Select Camera</div>', unsafe_allow_html=True)
 
-    col_back, col_front, col_info = st.columns([1, 1, 5])
-    with col_back:
-        back_label = "✅ 📷 Back" if facing == "environment" else "📷 Back"
-        if st.button(back_label, key="cam_back", use_container_width=True):
-            st.session_state.cam_facing = "environment"
-            st.rerun()
-    with col_front:
-        front_label = "✅ 🤳 Front" if facing == "user" else "🤳 Front"
-        if st.button(front_label, key="cam_front", use_container_width=True):
-            st.session_state.cam_facing = "user"
-            st.rerun()
-    with col_info:
-        cam_name = "Back (Environment) Camera" if facing == "environment" else "Front (Selfie) Camera"
-        st.markdown(f'<div style="padding:0.5rem 0; font-size:0.78rem; color:#475569;">Active: <span style="color:#60a5fa; font-weight:600;">{cam_name}</span></div>', unsafe_allow_html=True)
+    # Segmented control — two side-by-side columns, no gap
+    c1, cdiv, c2, cpad = st.columns([1.2, 0.01, 1.2, 6])
+
+    with c1:
+        cls1 = "cam-active" if facing == "environment" else "cam-inactive"
+        st.markdown(f'<div class="{cls1}">', unsafe_allow_html=True)
+        if st.button("📷  Back Camera", key="cam_back"):
+            if facing != "environment":
+                st.session_state.cam_facing = "environment"
+                st.session_state.cam_gen   += 1   # new gen → new WebRTC key → kills old session
+                st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with cdiv:
+        st.markdown('<div class="cam-divider"></div>', unsafe_allow_html=True)
+
+    with c2:
+        cls2 = "cam-active" if facing == "user" else "cam-inactive"
+        st.markdown(f'<div class="{cls2}">', unsafe_allow_html=True)
+        if st.button("🤳  Front Camera", key="cam_front"):
+            if facing != "user":
+                st.session_state.cam_facing = "user"
+                st.session_state.cam_gen   += 1
+                st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    cam_name = "Back (Rear) Camera" if facing == "environment" else "Front (Selfie) Camera"
+    st.markdown(
+        f'<div style="font-size:0.76rem; color:#475569; margin-bottom:1rem;">'
+        f'Active → <span style="color:#60a5fa; font-weight:600;">{cam_name}</span></div>',
+        unsafe_allow_html=True
+    )
 
     st.info("🔒 Camera access required — allow permission when prompted, then click **Start**.")
 
-    # Build constraints based on selection
+    # Use "exact" so browser MUST switch — "ideal" lets it stay on the old camera
     video_constraints = {
-        "facingMode": {"ideal": facing},
-        "width":  {"ideal": 1280},
-        "height": {"ideal": 720},
+        "facingMode": {"exact": facing},
+        "width":      {"ideal": 1280},
+        "height":     {"ideal": 720},
     }
 
     class VideoProcessor(VideoProcessorBase):
@@ -781,21 +791,21 @@ if page == "live":
             r = process_image(img, video_mode=True)
             return av.VideoFrame.from_ndarray(r["image"], format="bgr24")
 
-    # Key includes facing mode so switching camera forces a fresh WebRTC session
+    # Key = facing + gen → every switch gets a brand-new key → WebRTC fully reinitialises
     webrtc_streamer(
-        key=f"vms-cam-{facing}",
+        key=f"vms-cam-{facing}-{gen}",
         video_processor_factory=VideoProcessor,
         media_stream_constraints={"video": video_constraints, "audio": False},
         async_processing=True,
     )
 
     st.markdown("""
-    <div style="margin-top:1rem; padding:0.8rem 1rem; background:var(--bg2);
+    <div style="margin-top:0.9rem; padding:0.75rem 1rem; background:var(--bg2);
          border:1px solid var(--bdr); border-radius:10px;
-         font-size:0.75rem; color:var(--text3); line-height:1.7;">
+         font-size:0.74rem; color:var(--text3); line-height:1.7;">
         💡 <b style="color:var(--text2);">Tip:</b>
-        Switch cameras by tapping the button above, then press <b style="color:var(--text2);">Stop → Start</b>
-        in the video widget to apply the change. On desktop, both options use your webcam.
+        Tap a camera button above — the stream restarts automatically with the correct camera.
+        On desktop both buttons use your single webcam.
     </div>
     """, unsafe_allow_html=True)
 
