@@ -2,13 +2,14 @@ import cv2
 import os
 import re
 import numpy as np
+import easyocr
 from services.detector import detect_vehicle, detect_plate, detect_seatbelt
 from services.ocr import read_plate, correct_indian_plate, PLATE_PATTERN, INDIAN_STATE_CODES
 
 try:
     import easyocr
     EASYOCR_AVAILABLE = True
-    reader = easyocr.Reader(['en'], gpu=False)
+    
 except ImportError:
     EASYOCR_AVAILABLE = False
     print("EasyOCR not installed. Install with: pip install easyocr")

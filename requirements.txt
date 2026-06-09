@@ -6,5 +6,4 @@ pillow
 pandas
 streamlit-webrtc
 av
-easyocr
 pytesseract
