@@ -14,7 +14,7 @@ def _get_models():
 
 def detect_vehicle(image):
     _, _, vehicle_model = _get_models()
-    return vehicle_model(image, conf=0.4)
+    return vehicle_model(image, conf=0.25)
 
 def detect_plate(image, conf=0.25):
     plate_model, _, _ = _get_models()
