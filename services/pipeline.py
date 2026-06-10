@@ -4,7 +4,15 @@ import re
 import numpy as np
 
 from services.detector import detect_vehicle, detect_plate, detect_seatbelt
-from services.ocr import read_plate, correct_indian_plate, PLATE_PATTERN, INDIAN_STATE_CODES
+from services.ocr import read_plate  as tesseract_read_plate, correct_indian_plate, PLATE_PATTERN, INDIAN_STATE_CODES
+try:
+    import easyocr
+    reader = easyocr.Reader(['en'])
+    EASYOCR_AVAILABLE = True
+
+except Exception:
+    EASYOCR_AVAILABLE = False
+    reader = None
 
 
 
@@ -137,13 +145,16 @@ def easyocr_on_crop(crop, label=""):
         print(f"  EasyOCR({label}) best-effort: {best}")
     return best
 
-
 def read_plate_with_fallback(plate_crop, label=""):
-    """Tesseract first, then EasyOCR on the same crop."""
-    text = read_plate(plate_crop)
+    """Tesseract first, then EasyOCR."""
+
+    text = tesseract_read_plate(plate_crop)
+
     if text != "Not Found" and len(text) >= 6:
         return text
+
     return easyocr_on_crop(plate_crop, label=label)
+
 
 
 # ── YOLO plate detection ──────────────────────────────────────────────────────
